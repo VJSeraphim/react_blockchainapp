@@ -23,7 +23,7 @@ const Navbar = () => {
             </div>
             <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
                 {["Market", "Exchange", "Tutorials", "Wallets"].map((item, i) => (
-                    <NavbarItem key={item.i} title={item}/>
+                    <NavbarItem key={item.i} title={item} />
                 ))}
                 <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
                     Login
@@ -34,6 +34,20 @@ const Navbar = () => {
                     ? <AiOutlineClose fontSize={28} className="text-white md:hidden cursor-pointer" onClick={() => setToggleMenu(false)} />
                     : <HiMenuAlt4 fontSize={28} className="text-white md:hidden cursor-pointer" onClick={() => setToggleMenu(true)} />
                 }
+                {toggleMenu && (
+                    <ul 
+                        className="z-10 fixed top-0 -right-2 p-3 w-[70vw] h-screen shadow-2xl md:hidden 
+                        list-none flex flex-col justify-start items-end rounded-md blue-glassmorphism 
+                        text-white animate-slide-in"
+                    >
+                        <li className="text-xl 2-full my-2"> 
+                            <AiOutlineClose onClick={() => setToggleMenu(false)} />
+                        </li>
+                        {["Market", "Exchange", "Tutorials", "Wallets"].map((item, i) => (
+                            <NavbarItem key={item.i} title={item} classProps="my-2 text-lg"/>
+                        ))}
+                    </ul>
+                )}
             </div>
         </nav>
     )
