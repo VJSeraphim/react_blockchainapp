@@ -21,7 +21,9 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 const Welcome = () => {
 
-    const { walletConnection } = useContext(TransactionContext)
+    const { walletConnection, currentAccount } = useContext(TransactionContext)
+
+    console.log(walletConnection)
 
     /* const [isLoading, setIsLoading] = useState(false) */
 
@@ -41,15 +43,17 @@ const Welcome = () => {
                     <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
                         Explore Crypto World. Buy and sell cryptocurrencies more easily.
                     </p>
-                    <button
-                        type="button" onClick={walletConnection}
-                        className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-                    >
-                        <AiFillPlayCircle className="text-white mr-2" />
-                        <p className="text-white text-base font-semibold">
-                            Connect your wallet
-                        </p>
-                    </button>
+                    {! currentAccount && (
+                        <button
+                            type="button" onClick={walletConnection}
+                            className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+                        >
+                            <AiFillPlayCircle className="text-white mr-2" />
+                            <p className="text-white text-base font-semibold">
+                                Connect your wallet
+                            </p>
+                        </button>
+                    )}
                     <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                         <div className={`rounded-tl-2xl ${commonStyles}`}>
                             Reliability
@@ -99,7 +103,7 @@ const Welcome = () => {
                         <input placeholder="Enter your message" name="message" type="text" handleChange={() => {}}/>
                     
                     <div className="h-[1px] w-full bg-gray-400 my-2" />
-                        {/*isLoading*/ true ? (
+                        {/*isLoading*/ false ? (
                             <Loader />
                         ) : (
                             <button 
@@ -107,6 +111,7 @@ const Welcome = () => {
                                 onClick={handleSubmit}
                                 className="text-white w-full my-2 border-[1px] p-2 border-[#3d4f7c] rounded-full cursor-pointer"
                             >
+                                Send Now
                             </button>
                         )}
                     </div>
