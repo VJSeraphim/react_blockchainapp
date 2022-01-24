@@ -18,7 +18,9 @@ const getEthereumContract = () => {
 export const TransactionProvider = ({ children }) => {
     const [currentAccount, setCurrentAccount] = useState('')
     const [formData, setFormData] = useState({addressTo: '', amount: '', keyword: '', message: ''});
-
+    const [isLoading, setIsLoading] = useState(false);
+    const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'));
+    
     const handleChange = (e, name) => {
         setFormData((prevState) => ({ ...prevState, [name]: e.target.value }))
     }
@@ -64,11 +66,11 @@ export const TransactionProvider = ({ children }) => {
             // get data from the form
 
             const { addressTo, amount, keyword, message } = formData
-            const transactionContract = getEthereumContract()
+            const transactionsContract = getEthereumContract()
             const parsedAmount = ethers.utils.parseEther(amount)
 
             await ethereum.request({
-                method: 'eth_sentTransaction',
+                method: 'eth_sendTransaction',
                 params: [{
                     from: currentAccount,
                     to: addressTo,
@@ -76,6 +78,18 @@ export const TransactionProvider = ({ children }) => {
                     value: parsedAmount._hex // 0.0001~~(Decimal Number)
                 }],
             })
+
+            const transactionHash = await transactionsContract.addToBlockchain(addressTo, parsedAmount, message, keyword)
+
+            setIsLoading(true)
+            console.log(`Loading - ${transactionHash}`)
+            await transactionHash.wait()
+            setIsLoading(false)
+            console.log(`Successfully Loaded! - ${transactionHash}`)
+
+            const transactionsCount = await transactionsContract.getTransactionCount()
+
+            setTransactionCount(transactionsCount.toNumber())
         } catch (error) {
             console.log(error)
             throw new Error("No Ethereum Object Detected.")
